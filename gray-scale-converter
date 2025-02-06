@@ -1,0 +1,16 @@
+import cv2
+import mediapipe as mp
+path=input("enter the path:").strip()
+print(path)
+output=input("enter the storage location:").strip()
+img1=cv2.imread(path,0)
+img1=cv2.resize(img1,(600,300))
+print("here is ur grey scale image")
+cv2.imshow("Image1",img1)
+
+k = cv2.waitKey(0)
+if k==ord("s"):
+    cv2.imwrite("F:\\output.png",img1)
+    print("stored")
+else:
+    cv2.destroyAllWindows()
