@@ -1,0 +1,46 @@
+import cv2
+
+# URL of the IP camera (replace with your actual camera URL)
+camera = "http://192.168.31.201:8080/video"
+
+# Opening the video capture object to stream video from the IP camera
+obj = cv2.VideoCapture(0)  # Typically used for local webcam, but we use .open() to specify the IP camera
+obj.open(camera)  # Opening the IP camera stream using the URL
+
+# Defining codec for AVI format (XVID is commonly used)
+fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Codec for AVI format
+
+# Creating a VideoWriter object to save the output video
+# "output4.avi" is the filename, fourcc is the codec, 20.0 is FPS (frames per second), (600, 300) is the resolution
+output = cv2.VideoWriter("output4.avi", fourcc, 20.0, (600, 300))
+
+# Main loop to capture video stream from the camera and display it
+while obj.isOpened():
+    ret, frame = obj.read()  # Read a frame from the camera
+    
+    if not ret:
+        print("Failed to capture frame from camera")
+        break
+
+    # Resizing the captured frame to 600x300 resolution
+    frame = cv2.resize(frame, (600, 300))
+
+    # Display the frame in a window titled "frame"
+    cv2.imshow("frame", frame)
+
+    # Wait for 25 milliseconds for a key press, exit loop if the 'k' key is pressed
+    k = cv2.waitKey(25)
+
+    # Write the frame to the output video file
+    output.write(frame)
+
+    # If 'k' is pressed, break out of the loop and stop recording
+    if k == ord("k"):
+        break
+
+# Release the video capture and video writer objects after the loop ends
+obj.release()
+output.release()
+
+# Close all OpenCV windows
+cv2.destroyAllWindows()
