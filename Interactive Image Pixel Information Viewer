@@ -1,0 +1,45 @@
+import cv2
+import numpy as np
+
+# Function to display pixel information on mouse click
+def info(event, x, y, flags, param):
+    # Left button click: Display X, Y coordinates
+    if event == cv2.EVENT_LBUTTONDOWN:
+        cv2.putText(img, f'x={x} y={y}', (x, y), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 107), 1, cv2.LINE_AA)
+    
+    # Right button click: Display RGB values of the pixel
+    if event == cv2.EVENT_RBUTTONDOWN:
+        b, g, r = img[y, x]  # Get BGR values at the clicked position
+        cv2.putText(img, f'B={b} G={g} R={r}', (x, y), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 107), 1, cv2.LINE_AA)
+
+# Ask user for the image path
+image_path = input("Enter the path of the image: ")
+
+# Load the image
+img = cv2.imread(image_path)
+
+# Check if the image is loaded correctly
+if img is None:
+    print("Error: Could not load image. Check the file path.")
+    exit()
+
+# Resize image for better display
+img = cv2.resize(img, (600, 300))
+
+# Create a window
+cv2.namedWindow("window")
+
+# Set mouse callback function
+cv2.setMouseCallback("window", info)
+
+# Display the image and wait for user interaction
+while True:
+    cv2.imshow("window", img)
+    k = cv2.waitKey(1)
+
+    # Press 'k' to exit the loop
+    if k == ord("k"):
+        break
+
+# Close all OpenCV windows
+cv2.destroyAllWindows()
