@@ -1,0 +1,52 @@
+import cv2
+
+# Capturing video from the webcam (device 0)
+obj = cv2.VideoCapture(0)
+
+# Defining codec for AVI format (XVID is a commonly used codec)
+fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Codec for AVI format
+
+# Creating a VideoWriter object to save the output video
+# "output4.avi" is the filename, fourcc is the codec, 20.0 is FPS (frames per second), (600, 300) is the resolution
+output = cv2.VideoWriter("output4.avi", fourcc, 20.0, (600, 300))
+
+# .isOpened() checks if the video capture device is open and running
+while obj.isOpened():
+    ret, frame = obj.read()  # Reading a frame from the webcam
+
+    if ret:
+        # Resizing the captured frame to 600x300 resolution
+        frame = cv2.resize(frame, (600, 300))
+
+        # Display the normal frame in a window titled "output"
+        cv2.imshow("output", frame)
+
+        # Converting the frame to grayscale
+        grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        # Resizing the grayscale frame to 600x300 resolution
+        grey = cv2.resize(grey, (600, 300))
+
+        # Flipping the grayscale image horizontally (left to right)
+        grey = cv2.flip(grey, 1)
+
+        # Display the grayscale frame in a window titled "grey output"
+        cv2.imshow("grey output", grey)
+
+        # Wait for 20 ms for a key press, and check if the key pressed is 'k' to break the loop
+        k = cv2.waitKey(20)
+
+        # Saving the current frame to the output video file
+        output.write(frame)
+
+        # If the 'k' key is pressed, exit the loop
+        if k == ord("k"):
+            break
+
+    else:
+        # If the frame wasn't captured properly, close all windows and stop capture
+        cv2.destroyAllWindows()
+
+# Release the video writer and video capture objects after the loop ends
+output.release()
+obj.release()
