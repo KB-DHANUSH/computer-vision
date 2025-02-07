@@ -1,0 +1,42 @@
+import cv2  # Import OpenCV library
+
+# Initialize video capture from the default webcam (device 0)
+obj = cv2.VideoCapture(0)
+
+# Read the first frame from the webcam
+ret, frame = obj.read()
+
+# Initialize a frame counter
+count = 0
+
+# Infinite loop to continuously capture frames
+while True:
+    if ret == 1:  # Check if the frame was successfully read
+        # Save the current frame as an image file in the specified directory
+        # The filename format will be "img0.jpg", "img1.jpg", etc.
+        cv2.imwrite("C:\\Users\\Dhanush K B\\PycharmProjects\\pythonProject9\\frame\\img%d.jpg" % count, frame)
+
+        # Set the video capture position in milliseconds (incorrect usage of exponentiation)
+        obj.set(cv2.CAP_PROP_POS_MSEC, (count**100))  # This line doesn't work as intended
+
+        # Read the next frame from the webcam
+        ret, frame = obj.read()
+
+        # Display the captured frame in a window titled "frame"
+        cv2.imshow("frame", frame)
+
+        # Increment frame counter
+        count += 1
+
+        # Wait for 25 milliseconds for a key press
+        k = cv2.waitKey(25)
+
+        # If the 'k' key is pressed, break the loop and stop capturing
+        if k == ord("k"):
+            break
+
+# Release the video capture object to free system resources
+obj.release()
+
+# Close all OpenCV windows
+cv2.destroyAllWindows()
